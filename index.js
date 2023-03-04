@@ -9,23 +9,26 @@ const server = http.createServer ((req, res) => {
 
 
     if (url === '/') { 
-        fs.readFile('hello.jpg', function(err, data) {        
+        fs.readFile('hello.jpg', function(err, data) {   
+            if (err) {
+                throw err;
+            }       
               res.write('<h1>Welcome to my Home Page</h1><img width="800px"src="data:image/jpeg;base64,');
               res.write(Buffer.from(data).toString('base64'));
               res.end(' "/>');
         })
     }
 
-    if (url === '/list') {
+    else if (url === '/list') {
         fetch ('https://swapi.dev/api/people').then(res => res.json()).then(data => {
             createData(data);
             res.write(tableData);
             res.end();
         });  
     }
-    
+
     else {
-        res.write("ERROR: THIS PAGE DOES NOT EXIST");
+        res.write('Page not found');
         res.end();
     }
 
